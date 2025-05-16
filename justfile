@@ -10,6 +10,7 @@ download-deps:
 
 
 build-js:
+    npm i
     npm run release
     cp public/js/main.js _extensions/livemol/assets
     cp public/main.css _extensions/livemol/assets
