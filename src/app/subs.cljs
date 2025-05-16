@@ -24,4 +24,7 @@
  (fn [[_ instance-id]]
    (rf/subscribe [:app/instance-db instance-id]))
  (fn [instance-db _] 
-   (:code-string instance-db)))
+   (let [code-string (:code-string instance-db)]
+     (if (string? code-string)
+       code-string
+       (or (and code-string (str code-string)) app.db/default-code-string)))))
