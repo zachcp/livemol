@@ -42,8 +42,8 @@
        ;;  :volumeStreamingServer ""
        })
 
-(defui MolstarMVS []
-  (let [mvsj-data (urf/use-subscribe [:app/mvsj])
+(defui MolstarMVS [{:keys [instance-id]}]
+  (let [mvsj-data (urf/use-subscribe [:app/mvsj instance-id])
         container-ref (uix/use-ref nil)
         [molstar-instance, set-molstar-instance] (uix/use-state nil)]
 

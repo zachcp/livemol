@@ -11,25 +11,20 @@
    [uix.core :as uix :refer [defui $]]
    [uix.dom]))
 
-(defui app []
+(defui app [{:keys [instance-id]}]
   ($ :div.wrapper
-     ($ CodeMirrorCLJ)
-     ($ MolstarMVS)))
+     ($ CodeMirrorCLJ {:instance-id instance-id})
+     ($ MolstarMVS {:instance-id instance-id})))
 
 (defn render
   "Renders the application into the provided root"
-  [root initial-state]
-  (let [db (cond
-             (string? initial-state) (assoc app.db/default-db :code-string initial-state)
-             (map? initial-state) (assoc app.db/default-db :mvsj initial-state)
-             :else app.db/default-db)]
-    (rf/dispatch-sync [:app/init-db db])
-    ;; Parse the initial code-string to MVSJ if we have code-string
-    (when (string? initial-state)
-      (rf/dispatch [:code/parse-to-mvsj]))
-    (uix.dom/render-root
-     ($ uix/strict-mode ($ app))
-     root)))
+  [root instance-id initial-state]
+  ;; Initialize this instance's state
+  (rf/dispatch-sync [:app/init-instance instance-id initial-state])
+  
+  (uix.dom/render-root
+   ($ uix/strict-mode ($ app {:instance-id instance-id}))
+   root))
 
 (defn parse-initial-state
   "Tries to parse initial state from a string.
@@ -87,7 +82,10 @@
      var content = document.getElementById('custom-root-id').getAttribute('data-content');
      app.core.init('custom-root-id', content);
    </script>"
-  ([] (init "root"))
+  ([] 
+   ;; Initialize global state only once
+   (rf/dispatch-sync [:app/init-db app.db/default-db])
+   (init "root"))
   ([root-id] (init root-id nil))
   ([root-id initial-state]
    (let [root (uix.dom/create-root (js/document.getElementById root-id))
@@ -98,4 +96,4 @@
                            (and initial-state (not (map? initial-state))) (js->clj initial-state)
                            ;; Otherwise pass through
                            :else initial-state)]
-     (render root processed-state))))
+     (render root root-id processed-state))))

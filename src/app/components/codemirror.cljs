@@ -26,12 +26,12 @@
        :else
        (str indent-str (pr-str node))))))
 
-(defui CodeMirrorCLJ []
-  (let [code-string (urf/use-subscribe [:app/code-string])
+(defui CodeMirrorCLJ [{:keys [instance-id]}]
+  (let [code-string (urf/use-subscribe [:app/code-string instance-id])
         onchange (uix/use-callback
                   (fn [val _viewupdate]
-                    (rf/dispatch [:code-string/changed val]))
-                  [])]
+                    (rf/dispatch [:code-string/changed instance-id val]))
+                  [instance-id])]
     ($ :div.codemirror_container
        ($ CodeMirror
           {:value code-string
@@ -41,7 +41,7 @@
                 (.of keymap #js {:key "Alt-Enter"
                                  :run  (fn [e]
                                          (let [editor-text (.toString (.. e -state -doc))]
-                                           (rf/dispatch [:code-string/changed editor-text])
+                                           (rf/dispatch [:code-string/changed instance-id editor-text])
                                            true))})
                 default_extensions]
            :on-change onchange}))))

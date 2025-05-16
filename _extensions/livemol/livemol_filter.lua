@@ -14,6 +14,22 @@ local function ensureHtmlDeps()
     }
 end
 
+-- Add initialization script to ensure app is initialized only once
+local function ensureAppInitialization()
+    -- Add global initialization script that runs once
+    quarto.doc.includeText("in-header", [[
+<script>
+window.livemolInitialized = false;
+document.addEventListener("DOMContentLoaded", function() {
+    if (!window.livemolInitialized) {
+        app.core.init();
+        window.livemolInitialized = true;
+    }
+});
+</script>
+]])
+end
+
 -- Generate a unique ID for the molecule viewer container
 local counter = 0
 local function generateUniqueId()
@@ -63,5 +79,6 @@ end
 -- Ensure dependencies are added at the beginning of the document
 function Meta(meta)
     ensureHtmlDeps()
+    ensureAppInitialization()
     return meta
 end
