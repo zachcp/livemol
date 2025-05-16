@@ -32,6 +32,8 @@ jobs:
 
       - name: Install clojure tools
         uses: DeLaGuardo/setup-clojure@13.2
+        with:
+          cli: "latest"
 
       - name: Load Clojure dependencies
         run: clojure -A:dev -P # This resolves and downloads all dependencies
