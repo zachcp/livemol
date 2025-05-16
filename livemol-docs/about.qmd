@@ -158,35 +158,3 @@ filters:
    [[:primitive {:kind "ellipsoid", :center [1, 1, 1], :major_axis [1, 0, 0],
                  :minor_axis [0, 1, 0], :radius [1.5, 2, 1], :color "#cccccc"} nil]]]]]
 ```
-
-
-
-
-```{.clojure .livemol}
-[:root {}
-   [[:download {:url "https://files.wwpdb.org/download/1TQN.cif"}
-     [[:parse {:format "mmcif"}
-       [[:structure {:type "model"}
-         [[:component {:selector "polymer"}
-           [[:representation {:type "cartoon"}
-             [[:color {:color "white"} nil]]]]]
-          [:component {:selector "ligand"}
-           [[:representation {:type "ball_and_stick"}
-             [[:color {} {:molstar_color_theme_name "element-symbol"}]]]
-            [:focus {:direction [-28.47, -17.66, -16.32], :up [0.98, -0.19, 0],
-                     :radius 14, :radius_extent 5} nil]]]]]]]]]
-    [:download {:url "https://www.ebi.ac.uk/pdbe/densities/x-ray/1tqn/box/-22.367,-33.367,-21.634/-7.106,-10.042,-0.937?detail=3"}
-     [[:parse {:format "bcif"}
-       [[:volume {:channel_id "2FO-FC"}
-         [[:volume_representation {:type "isosurface", :relative_isovalue 1.5,
-                                  :show_wireframe true, :show_faces false}
-           [[:color {:color "blue"} nil]
-            [:opacity {:opacity 0.3} nil]]]]]
-        [:volume {:channel_id "FO-FC"}
-         [[:volume_representation {:type "isosurface", :relative_isovalue 3, :show_wireframe true}
-           [[:color {:color "green"} nil]
-            [:opacity {:opacity 0.3} nil]]]
-          [:volume_representation {:type "isosurface", :relative_isovalue -3, :show_wireframe true}
-           [[:color {:color "red"} nil]
-            [:opacity {:opacity 0.3} nil]]]]]]]]]]]
-```
