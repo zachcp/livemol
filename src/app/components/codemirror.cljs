@@ -3,9 +3,8 @@
    [uix.core :as uix :refer [defui $]]
    [uix.dom]
    [re-frame.core :as rf]
-   [cljs.pprint :as pprint]
+   [uix.re-frame :as urf]
    [clojure.string :as str]
-   [cljs.reader :as reader]
    ["@uiw/react-codemirror$default" :as CodeMirror]
    ["@nextjournal/clojure-mode" :refer [default_extensions, complete_keymap]]
    ["@codemirror/view" :refer [keymap]]))
@@ -13,74 +12,37 @@
 (defn- format-code-structure
   ([node] (format-code-structure node 0))
   ([node indent-level]
-   (if (vector? node)
-     (if (and (keyword? (first node)) (map? (second node)))
-       (let [[tag props children] node
-             indent (apply str (repeat indent-level "  "))]
-         (str indent "[" tag " " (pr-str props)
-              (if (seq children)
-                (str "\n" (format-code-structure children (inc indent-level)) "\n" indent "]")
-                " []]"))
+   (let [indent-str (apply str (repeat indent-level "  "))]
+     (cond
+       (vector? node)
+       (if (and (>= (count node) 2) (keyword? (first node)) (map? (second node)))
+         (let [[tag props & children] node]
+           (str indent-str "[" tag " " (pr-str props)
+                (if (seq children)
+                  (str "\n" (str/join "\n" (map #(format-code-structure % (inc indent-level)) (first children))) "\n" indent-str "]")
+                  " []]")))
          (str/join "\n" (map #(format-code-structure % indent-level) node)))
-       (str (apply str (repeat indent-level "  ")) "[]")))))
 
-(defn- nodize
-  "Transforms a hiccup-like vector [:name props children] into a node map. "
-  [form]
-  (let [[name-val props-val children-val] form]
-    (cond-> {"kind" name-val}
-      (not (empty? props-val)) (assoc "params" props-val)
-      (seq children-val) (assoc "children" (mapv nodize children-val)))))
-
-(defn- create-mvsj [clj-code-string]
-  (let [clj-data (reader/read-string clj-code-string)
-        nodize (fn [form] (let [[name-val props-val children-val] form]
-                            (cond-> {"kind" name-val}
-                              (not (empty? props-val)) (assoc "params" props-val)
-                              (seq children-val) (assoc "children" (mapv nodize children-val)))))
-        msvj-state (nodize clj-data)]
-    {:kind "single"
-     :root msvj-state
-     :metadata {:version "1.4"
-                :timestamp "2025-04-14T19:04:58.549065+00:00"}}))
-
-(def initial-code
-  [:root {}
-   [[:download {:url "https://files.wwpdb.org/download/1cbs.cif"}
-     [[:parse {:format "mmcif"}
-       [[:structure {:type "model"}
-         [[:component {:selector "all"}
-           [[:representation {:type "cartoon"}
-             [[:color {:color "blue"} nil]]]]]]]]]]]]])
-
-(defn- capture-pprint [data]
-  (with-out-str
-    (pprint/pprint data)))
+       :else
+       (str indent-str (pr-str node))))))
 
 (defui CodeMirrorCLJ []
-  (let [codestring (capture-pprint initial-code)
-        [value set-value] (uix/use-state codestring)
-        onchange (uix/use-callback (fn [val, viewupdate] (set-value val)) [])]
+  (let [code-string (urf/use-subscribe [:app/code-string])
+        onchange (uix/use-callback
+                  (fn [val _viewupdate]
+                    (rf/dispatch [:code/set-string val]))
+                  [])]
     ($ :div.codemirror_container
        ($ CodeMirror
-          {:value value
-           ;; :height "250px"
+          {:value code-string
+           :height "250px"
            :extensions
            #js [(.of keymap complete_keymap)
                 (.of keymap #js {:key "Alt-Enter"
                                  :run  (fn [e]
-                                         (let [editor-text (.toString (.. e -state -doc))
-                                               results (try
-                                                         (let [parsed-mvsj (create-mvsj editor-text)]
-                                                           (js/console.log parsed-mvsj)
-                                                           (rf/dispatch [:mvsj/set parsed-mvsj])
-                                                           parsed-mvsj)
-                                                         (catch js/Error err
-                                                           (js/console.error "Error parsing MVSJ:" err)
-                                                           nil))]
-                                           (js/console.log "Editor contents:" editor-text)
-                                           (when results
-                                             (js/console.log "Parsed MVSJ:", results))
+                                         (let [editor-text (.toString (.. e -state -doc))]
+                                           (rf/dispatch [:code/set-string editor-text])
+                                           (rf/dispatch [:code/parse-to-mvsj])
                                            true))})
                 default_extensions]
            :on-change onchange}))))

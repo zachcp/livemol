@@ -1,4 +1,21 @@
-(ns app.db)
+(ns app.db
+  (:require [cljs.pprint :as pprint]))
+
+(defn- capture-pprint [data]
+  (with-out-str
+    (pprint/pprint data)))
+
+(def initial-code
+  [:root {}
+   [[:download {:url "https://files.wwpdb.org/download/1cbs.cif"}
+     [[:parse {:format "mmcif"}
+       [[:structure {:type "model"}
+         [[:component {:selector "all"}
+           [[:representation {:type "cartoon"}
+             [[:color {:color "blue"} nil]]]]]]]]]]]]])
+
+(def initial-code-string
+  (capture-pprint initial-code))
 
 (def mvs-sample
   {:kind "single"
@@ -26,4 +43,6 @@
     :version "1.4"}})
 
 (def default-db
-  {:mvsj  mvs-sample})
+  {:mvsj mvs-sample
+   :initial-code initial-code
+   :code-string initial-code-string})

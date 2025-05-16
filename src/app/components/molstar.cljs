@@ -58,6 +58,7 @@
     (uix/use-effect
      (fn []
        (when (and molstar-instance mvsj-data)
+         (js/console.log "Loading MVSJ data into MolStar:" (clj->js mvsj-data))
          (.loadMvsData
           ^js molstar-instance
           (js/JSON.stringify (clj->js mvsj-data))

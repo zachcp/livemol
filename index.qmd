@@ -23,10 +23,3 @@ Get a protein from the RCSB PDB with:
 
 [:div {} []]
 ```
-
-
-
-```{.clojure }
-
-[:div {} []]
-```
