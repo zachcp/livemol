@@ -31,3 +31,162 @@ filters:
          [[:representation {:type "cartoon"}
            [[:color {:color "blue"} nil]]]]]]]]]]]]]
 ```
+
+
+
+
+```{.clojure .livemol}
+[:root {}
+ [[:download {:url "https://files.wwpdb.org/download/1cbs.cif"}
+   [[:parse {:format "mmcif"}
+     [[:structure {:type "assembly", :assembly_id "1"}
+       [[:component {:selector "all"}
+         [[:representation {:type "cartoon"}
+           [[:color {:color "#1b9e77"} nil]]]]]]]]]]]]]
+```
+
+
+```{.clojure .livemol}
+[:root {}
+ [[:download {:url "https://files.wwpdb.org/download/1LAP.cif"}
+   [[:parse {:format "mmcif"}
+     [[:structure {:type "model"}
+       [[:component {:selector "all"}
+         [[:representation {:type "cartoon"}
+           [[:color {:selector {:label_asym_id "A", :label_seq_id 120}, :color "red"} nil]]]]]
+        [:component {:selector {:label_asym_id "A", :label_seq_id 120}}
+         [[:label {:text "ALA 120 A: My Label"} nil]
+          [:focus {} nil]]]]]]]]]]]
+```
+
+
+```{.clojure .livemol}
+[:root {}
+ [[:download {:url "https://files.wwpdb.org/download/1c0a.cif"}
+   [[:parse {:format "mmcif"}
+     [[:structure {:type "assembly"}
+       [[:component {:selector "protein"}
+         [[:representation {:type "cartoon"}
+           [[:color {:color "#e19039"} nil]]]]]
+        [:component {:selector "nucleic"}
+         [[:representation {:type "cartoon"}
+           [[:color {:color "#4b7fcc"} nil]]]]]
+        [:component {:selector {:label_asym_id "E"}}
+         [[:representation {:type "ball_and_stick"}
+           [[:color {:color "#229954"} nil]]]]]
+        [:component {:selector {:label_asym_id "B", :label_seq_id 217}}
+         [[:representation {:type "ball_and_stick"}
+           [[:color {:color "#ff0000"} nil]]]
+          [:label {:text "aaRS Class II Signature"} nil]]]
+        [:component {:selector {:label_asym_id "B", :label_seq_id 537}}
+         [[:representation {:type "ball_and_stick"}
+           [[:color {:color "#ff0000"} nil]]]
+          [:label {:text "aaRS Class II Signature"} nil]]]
+        [:component {:selector [{:label_asym_id "E"},
+                               {:label_asym_id "B", :label_seq_id 217},
+                               {:label_asym_id "B", :label_seq_id 537}]}
+         [[:focus {} nil]]]]]]]]]]]
+```
+
+
+
+```{.clojure .livemol}
+[:root {}
+ [[:download {:url "https://files.wwpdb.org/download/4hhb.cif"}
+   [[:parse {:format "mmcif"}
+     [[:structure {:type "symmetry_mates", :radius 5.0}
+       [[:component {:selector "all"}
+         [[:representation {:type "cartoon"}
+           [[:color {:color "#1b9e77"} nil]]]]]]]]]]]]]
+```
+
+
+```{.clojure .livemol}
+[:root {}
+ [[:download {:url "https://files.wwpdb.org/download/4hhb.cif"}
+   [[:parse {:format "mmcif"}
+     [[:structure {:type "symmetry", :ijk_min [-1, -1, -1], :ijk_max [1, 1, 1]}
+       [[:component {:selector "all"}
+         [[:representation {:type "cartoon"}
+           [[:color {:color "teal"} nil]]]]]]]]]]]]]
+```
+
+
+```{.clojure .livemol}
+[:root {}
+ [[:download {:url "https://files.wwpdb.org/download/4hhb.cif"}
+   [[:parse {:format "mmcif"}
+     [[:structure {:type "model"}
+       [[:component {:selector "all"}
+         [[:representation {:type "cartoon"}
+           [[:color {:color "red"} nil]]]]]]]]]]]
+  [:download {:url "https://files.wwpdb.org/download/1oj6.cif"}
+   [[:parse {:format "mmcif"}
+     [[:structure {:type "model"}
+       [[:transform {:rotation [-0.7202161, -0.33009904, -0.61018308,
+                               0.36257631, 0.57075962, -0.73673053,
+                               0.59146191, -0.75184312, -0.29138417],
+                     :translation [-12.54, 46.79, 94.5]} nil]
+        [:component {:selector "all"}
+         [[:representation {:type "cartoon"}
+           [[:color {:color "blue"} nil]]]]]]]]]]]]]
+```
+
+
+
+
+```{.clojure .livemol}
+[:root {}
+ [[:primitives {:opacity 0.66}
+   [[:primitive {:kind "ellipse", :center [1, 1, 1], :major_axis [1.5, 0, 0],
+                 :minor_axis [0, 2, 0], :theta_start 0, :theta_end 1.5707963267948966,
+                 :color "red", :tooltip "XY"} nil]
+    [:primitive {:kind "ellipse", :center [1, 1, 1], :major_axis_endpoint [2.5, 1, 1],
+                 :minor_axis_endpoint [1, 1, 2], :theta_start 0,
+                 :theta_end 1.5707963267948966, :color "green", :tooltip "XZ"} nil]
+    [:primitive {:kind "ellipse", :center [1, 1, 1], :major_axis [0, 10, 0],
+                 :minor_axis [0, 0, 1], :radius_major 2, :radius_minor 1,
+                 :theta_start 0, :theta_end 1.5707963267948966,
+                 :color "blue", :tooltip "YZ"} nil]
+    [:primitive {:kind "arrow", :start [1, 1, 1], :end [2.5, 1, 1], :length 1.7,
+                 :show_end_cap true, :tube_radius 0.05, :color "#ffff00", :tooltip "X"} nil]
+    [:primitive {:kind "arrow", :start [1, 1, 1], :direction [0, 2.2, 0],
+                 :show_end_cap true, :tube_radius 0.05, :color "#ff00ff", :tooltip "Y"} nil]
+    [:primitive {:kind "arrow", :start [1, 1, 2.2], :end [1, 1, 1],
+                 :show_start_cap true, :tube_radius 0.05, :color "#00ffff", :tooltip "Z"} nil]]]
+  [:primitives {:opacity 0.33}
+   [[:primitive {:kind "ellipsoid", :center [1, 1, 1], :major_axis [1, 0, 0],
+                 :minor_axis [0, 1, 0], :radius [1.5, 2, 1], :color "#cccccc"} nil]]]]]
+```
+
+
+
+
+```{.clojure .livemol}
+[:root {}
+   [[:download {:url "https://files.wwpdb.org/download/1TQN.cif"}
+     [[:parse {:format "mmcif"}
+       [[:structure {:type "model"}
+         [[:component {:selector "polymer"}
+           [[:representation {:type "cartoon"}
+             [[:color {:color "white"} nil]]]]]
+          [:component {:selector "ligand"}
+           [[:representation {:type "ball_and_stick"}
+             [[:color {} {:molstar_color_theme_name "element-symbol"}]]]
+            [:focus {:direction [-28.47, -17.66, -16.32], :up [0.98, -0.19, 0],
+                     :radius 14, :radius_extent 5} nil]]]]]]]]]
+    [:download {:url "https://www.ebi.ac.uk/pdbe/densities/x-ray/1tqn/box/-22.367,-33.367,-21.634/-7.106,-10.042,-0.937?detail=3"}
+     [[:parse {:format "bcif"}
+       [[:volume {:channel_id "2FO-FC"}
+         [[:volume_representation {:type "isosurface", :relative_isovalue 1.5,
+                                  :show_wireframe true, :show_faces false}
+           [[:color {:color "blue"} nil]
+            [:opacity {:opacity 0.3} nil]]]]]
+        [:volume {:channel_id "FO-FC"}
+         [[:volume_representation {:type "isosurface", :relative_isovalue 3, :show_wireframe true}
+           [[:color {:color "green"} nil]
+            [:opacity {:opacity 0.3} nil]]]
+          [:volume_representation {:type "isosurface", :relative_isovalue -3, :show_wireframe true}
+           [[:color {:color "red"} nil]
+            [:opacity {:opacity 0.3} nil]]]]]]]]]]]
+```
