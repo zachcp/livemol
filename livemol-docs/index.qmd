@@ -1,7 +1,34 @@
 ---
 title: "livemol-docs"
+filters:
+  - livemol
 ---
 
-This is a Quarto website.
 
-To learn more about Quarto websites visit <https://quarto.org/docs/websites>.
+Livemol is Quarto Extension that embeds a livemol instance consisting of a live code editor and
+a connected Mol* instance. The editor has a compressed versionof MolviewSpec which can be edited
+live.
+
+
+## Example
+
+```clojure
+;; {.clojure .livemol}
+[:root {}
+ [[:download {:url "https://files.wwpdb.org/download/1cbs.cif"}
+   [[:parse {:format "mmcif"}
+     [[:structure {:type "model"}
+       [[:component {:selector "all"}
+         [[:representation {:type "cartoon"}
+           [[:color {:color "red"} nil]]]]]]]]]]]]]
+```
+
+```{.clojure .livemol}
+[:root {}
+ [[:download {:url "https://files.wwpdb.org/download/1cbs.cif"}
+   [[:parse {:format "mmcif"}
+     [[:structure {:type "model"}
+       [[:component {:selector "all"}
+         [[:representation {:type "cartoon"}
+           [[:color {:color "red"} nil]]]]]]]]]]]]]
+```

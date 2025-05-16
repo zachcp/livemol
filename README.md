@@ -1,5 +1,17 @@
 # livemol
 
+## Overview
+
+This repo is currently 3 different things:
+
+1. A web app
+2. A quarto extension
+3. A documentation site for that extension.
+
+- The webapp is a cljs/UIX app.
+- the Quarto extension packages up that app as a `filter`
+- the `livemol-docs` folder builds a live website using the filter aboce
+
 
 ## Lifecycle
 
