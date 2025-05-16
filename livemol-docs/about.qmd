@@ -1,0 +1,33 @@
+---
+title: "About"
+format:
+  html:
+    grid:
+      margin-width: 450px
+      body-width: 1000px
+filters:
+  - livemol
+---
+
+# Basic Livemol
+
+```{.clojure .livemol}
+[:root {}
+ [[:download {:url "https://files.wwpdb.org/download/1cbs.cif"}
+   [[:parse {:format "mmcif"}
+     [[:structure {:type "model"}
+       [[:component {:selector "all"}
+         [[:representation {:type "cartoon"}
+           [[:color {:color "red"} nil]]]]]]]]]]]]]
+```
+
+
+```{.clojure .livemol}
+[:root {}
+ [[:download {:url "https://files.wwpdb.org/download/1cbs.cif"}
+   [[:parse {:format "mmcif"}
+     [[:structure {:type "model"}
+       [[:component {:selector "all"}
+         [[:representation {:type "cartoon"}
+           [[:color {:color "blue"} nil]]]]]]]]]]]]]
+```
