@@ -17,5 +17,7 @@
 (def default-code-string
   (capture-pprint default-code))
 
+;; {initial state/ editor } -> :code-string -> :mvsj -> Molview Cis
 (def default-db
-  {:code-string default-code-string})
+  {:code-string default-code-string
+   :mvsj {}})

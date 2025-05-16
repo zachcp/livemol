@@ -36,8 +36,7 @@ function CodeBlock(el)
         -- Process Clojure code if needed (basic validation)
         local structureValid = content:match("%[%s*:") ~= nil
 
-        -- Create a div with the livemol container class and the content as a data attribute
-        -- Escape content manually since pandoc.utils.escapeAttribute may not be available
+        -- Escape content for HTML attribute
         local escaped_content = content:gsub('&', '&amp;'):gsub('<', '&lt;'):gsub('>', '&gt;'):gsub('"', '&quot;')
 
         -- Add some classes based on content type
@@ -45,12 +44,13 @@ function CodeBlock(el)
         if structureValid then
             classes = classes .. " livemol-clojure"
         end
-
+        
         local html = string.format(
-            '<div id="%s" class="%s" data-content="%s"></div>\n<script>document.addEventListener("DOMContentLoaded", function() { app.core.init("%s"); });</script>',
+            '<div id="%s" class="%s" data-content="%s"></div>\n<script>document.addEventListener("DOMContentLoaded", function() { var el = document.getElementById("%s"); app.core.init("%s", el.getAttribute("data-content")); });</script>',
             id,
             classes,
             escaped_content,
+            id,
             id
         )
 
