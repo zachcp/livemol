@@ -1,0 +1,10 @@
+name: livemol
+title: LiveMol
+author: LiveMol Team
+version: 1.0.0
+quarto-required: ">=1.2.0"
+contributes:
+  filters:
+    - livemol_filter.lua
+  assets:
+    - assets
