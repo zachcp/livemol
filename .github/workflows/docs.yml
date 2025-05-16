@@ -18,14 +18,17 @@ jobs:
         uses: actions/checkout@v4
       - name: Set up Quarto
         uses: quarto-dev/quarto-actions/setup@v2
-      - name: Setup npm and just
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y npm clojure just
-          curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | sudo bash -s -- --to /usr/local/bin
       - name: Setup pages
         id: pages
         uses: actions/configure-pages@v4
+      - name: Setup npm and just
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y clojure just
+        # This step specifically loads the dependencies including dev deps
+      - name: Load Clojure dependencies
+        run: clojure -A:dev -P # This resolves and downloads all dependencies
+
       - name: Build Docs
         run: just build-docs
       - name: Upload artifact
