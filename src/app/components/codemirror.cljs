@@ -30,7 +30,7 @@
   (let [code-string (urf/use-subscribe [:app/code-string])
         onchange (uix/use-callback
                   (fn [val _viewupdate]
-                    (rf/dispatch [:code/set-string val]))
+                    (rf/dispatch [:code-string/changed val]))
                   [])]
     ($ :div.codemirror_container
        ($ CodeMirror
@@ -41,8 +41,7 @@
                 (.of keymap #js {:key "Alt-Enter"
                                  :run  (fn [e]
                                          (let [editor-text (.toString (.. e -state -doc))]
-                                           (rf/dispatch [:code/set-string editor-text])
-                                           (rf/dispatch [:code/parse-to-mvsj])
+                                           (rf/dispatch [:code-string/changed editor-text])
                                            true))})
                 default_extensions]
            :on-change onchange}))))

@@ -3,6 +3,13 @@
             [cljs.reader :as reader]
             [cljs.pprint :as pprint]))
 
+;; Effect handler that parses code-string to mvsj whenever code-string changes
+(rf/reg-event-fx
+ :code-string/changed
+ (fn [{:keys [db]} [_ new-value]]
+   {:db (assoc db :code-string new-value)
+    :dispatch [:code/parse-to-mvsj]}))
+
 (rf/reg-event-fx
  :app/init-db []
  (fn [_ [_ default-db]] {:db default-db}))
@@ -16,25 +23,23 @@
  (fn [_ [_ notification-data]]
    {:notification notification-data}))
 
-(rf/reg-event-db
+(rf/reg-event-fx
  :code/set-string
- (fn [db [_ code-string]]
-   (assoc db :code-string code-string)))
+ (fn [_ [_ code-string]]
+   {:dispatch [:code-string/changed code-string]}))
 
-(rf/reg-event-db
+(rf/reg-event-fx
  :code/set-initial
- (fn [db [_ initial-code]]
-   (let [code-string (with-out-str (pprint/pprint initial-code))]
-     (-> db
-         (assoc :initial-code initial-code)
-         (assoc :code-string code-string)))))
+ (fn [_ [_ code]]
+   (let [code-string (with-out-str (pprint/pprint code))]
+     {:dispatch [:code-string/changed code-string]})))
 
 (defn- nodize
   "Transforms a hiccup-like vector [:name props children] into a node map."
   [form]
   (let [[name-val props-val children-val] form]
     (cond-> {"kind" name-val}
-      (not (empty? props-val)) (assoc "params" props-val)
+      (seq props-val) (assoc "params" props-val)
       (seq children-val) (assoc "children" (mapv nodize children-val)))))
 
 (defn create-mvsj [clj-code-string]
