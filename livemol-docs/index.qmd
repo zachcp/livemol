@@ -1,5 +1,7 @@
 ---
 title: "livemol-docs"
+filters:
+  - livemol
 ---
 
 
@@ -9,6 +11,17 @@ live.
 
 
 ## Example
+
+```clojure
+;; {.clojure .livemol}
+[:root {}
+ [[:download {:url "https://files.wwpdb.org/download/1cbs.cif"}
+   [[:parse {:format "mmcif"}
+     [[:structure {:type "model"}
+       [[:component {:selector "all"}
+         [[:representation {:type "cartoon"}
+           [[:color {:color "red"} nil]]]]]]]]]]]]]
+```
 
 ```{.clojure .livemol}
 [:root {}
