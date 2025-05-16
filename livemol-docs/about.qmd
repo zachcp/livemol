@@ -1,12 +1,8 @@
 ---
 title: "About"
-format:
-  html:
-    grid:
-      margin-width: 450px
-      body-width: 1000px
 filters:
   - livemol
+
 ---
 
 # Basic Livemol

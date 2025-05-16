@@ -15,6 +15,10 @@ website:
 
 format:
   html:
+    grid:
+      sidebar-width: "150px"
+      margin-width: "150px"
+      body-width: "1200px"
     theme:
       - cosmo
       - brand
