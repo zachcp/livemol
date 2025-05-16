@@ -28,14 +28,20 @@
 
 (defui CodeMirrorCLJ [{:keys [instance-id]}]
   (let [code-string (urf/use-subscribe [:app/code-string instance-id])
+        ;; Ensure the value is a string
+        safe-code-string (if (string? code-string)
+                           code-string
+                           (or (and code-string (str code-string)) ""))
         onchange (uix/use-callback
                   (fn [val _viewupdate]
                     (rf/dispatch [:code-string/changed instance-id val]))
                   [instance-id])]
     ($ :div.codemirror_container
        ($ CodeMirror
-          {:value code-string
-           :height "250px"
+          {:value safe-code-string
+           :height "100%"
+           :width "100%"
+           :lineNumbers false
            :extensions
            #js [(.of keymap complete_keymap)
                 (.of keymap #js {:key "Alt-Enter"

@@ -32,25 +32,26 @@
    If it looks like MVSJ JSON data, parses it to a ClojureScript map.
    Handles HTML-escaped characters in the string."
   [state-string]
-  (let [unescaped-string (-> state-string
-                            (.replace (js/RegExp. "&quot;" "g") "\"")
-                            (.replace (js/RegExp. "&amp;" "g") "&")
-                            (.replace (js/RegExp. "&lt;" "g") "<")
-                            (.replace (js/RegExp. "&gt;" "g") ">"))]
-    (try
-      (let [parsed (reader/read-string unescaped-string)]
-        (if (vector? parsed)
-          ;; It's code representation
-          unescaped-string
-          ;; It might be JSON-formatted MVSJ data
-          (js->clj (js/JSON.parse unescaped-string))))
-      (catch js/Error _
-        (try
-          ;; Try to parse as JSON if ClojureScript reader failed
-          (js->clj (js/JSON.parse unescaped-string))
-          (catch js/Error _
-            ;; Return as-is if all parsing attempts fail
-            unescaped-string))))))
+  (when state-string
+    (let [unescaped-string (-> state-string
+                              (.replace (js/RegExp. "&quot;" "g") "\"")
+                              (.replace (js/RegExp. "&amp;" "g") "&")
+                              (.replace (js/RegExp. "&lt;" "g") "<")
+                              (.replace (js/RegExp. "&gt;" "g") ">"))]
+      (try
+        (let [parsed (reader/read-string unescaped-string)]
+          (if (vector? parsed)
+            ;; It's code representation
+            unescaped-string
+            ;; It might be JSON-formatted MVSJ data
+            (js->clj (js/JSON.parse unescaped-string))))
+        (catch js/Error _
+          (try
+            ;; Try to parse as JSON if ClojureScript reader failed
+            (js->clj (js/JSON.parse unescaped-string))
+            (catch js/Error _
+              ;; Return as-is if all parsing attempts fail
+              unescaped-string)))))))
 
 (defn ^:export init
   "Initialize the application.
@@ -90,10 +91,12 @@
   ([root-id initial-state]
    (let [root (uix.dom/create-root (js/document.getElementById root-id))
          processed-state (cond
+                           ;; If nil, pass nil explicitly
+                           (nil? initial-state) nil
                            ;; If it's a string, try to parse it appropriately
                            (string? initial-state) (parse-initial-state initial-state)
                            ;; If it's a JavaScript object, convert to ClojureScript map
-                           (and initial-state (not (map? initial-state))) (js->clj initial-state)
+                           (not (map? initial-state)) (js->clj initial-state)
                            ;; Otherwise pass through
                            :else initial-state)]
      (render root root-id processed-state))))

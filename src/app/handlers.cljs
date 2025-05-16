@@ -18,11 +18,17 @@
 (rf/reg-event-fx
  :app/init-instance
  (fn [{:keys [db]} [_ instance-id initial-state]]
-   (let [instance-db (if (string? initial-state)
+   (let [instance-db (cond
+                       ;; If it's a string, use it as code-string
+                       (string? initial-state)
                        {:code-string initial-state}
-                       {:mvsj initial-state})]
-     {:db (assoc-in db [:instances instance-id] instance-db)
-      :dispatch (when (string? initial-state) [:code/parse-to-mvsj instance-id])})))
+                       
+                       ;; If it's a map or other object, use it as MVSJ and set a default code-string
+                       :else
+                       {:mvsj initial-state
+                        :code-string app.db/default-code-string})]
+     (cond-> {:db (assoc-in db [:instances instance-id] instance-db)}
+       (string? initial-state) (assoc :dispatch [:code/parse-to-mvsj instance-id])))))
 
 (rf/reg-event-db
  :mvsj/set

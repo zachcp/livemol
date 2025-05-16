@@ -14,19 +14,20 @@
             href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap"
             rel="stylesheet"
         />
-        <link rel="stylesheet" href="/js/prism.css" />
         <link rel="stylesheet" href="/js/molstar.css" />
         <link rel="stylesheet" href="/main.css" />
-
-
     </head>
     <body>
         <div id="root"></div>
         <script src="/js/molstar.js"></script>
         <script src="/js/main.js"></script>
         <script>
-            // Initialize the application with the specified root element ID
+            // Basic initialization with default content
             app.core.init("root");
+            
+            // Example of how you could initialize with custom content
+            // var codeString = '[:root {} [[:download {:url "https://files.wwpdb.org/download/1cbs.cif"} [[:parse {:format "mmcif"} [[:structure {:type "model"} [[:component {:selector "all"} [[:representation {:type "cartoon"} [[:color {:color "blue"} nil]]]]]]]]]]]]]';
+            // app.core.init("root", codeString);
         </script>
     </body>
 </html>
